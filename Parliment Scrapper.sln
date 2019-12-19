@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29424.173
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parliment Scrapper", "Parliment Scrapper\Parliment Scrapper.csproj", "{34FB7609-9F88-45B7-8ECA-E451333D1F1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{34FB7609-9F88-45B7-8ECA-E451333D1F1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34FB7609-9F88-45B7-8ECA-E451333D1F1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34FB7609-9F88-45B7-8ECA-E451333D1F1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34FB7609-9F88-45B7-8ECA-E451333D1F1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF825EA6-A46A-4FCE-B08E-CCEB53397706}
+	EndGlobalSection
+EndGlobal
