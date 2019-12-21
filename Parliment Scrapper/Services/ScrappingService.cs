@@ -13,7 +13,7 @@ namespace Parliment_Scrapper.Services
 {
     public class ScrappingService
     {
-        public async Task<IHtmlDocument> ScrapUrlAsync(string url)
+        public async Task<IHtmlDocument> GetUrlDocument(string url)
         {
             CancellationTokenSource cancellationToken = new CancellationTokenSource();
             HttpClient httpClient = new HttpClient();
@@ -28,7 +28,60 @@ namespace Parliment_Scrapper.Services
             return document;
         }
 
-        public void GetScrapeResults(IHtmlDocument document, string[] QueryTerms)
+ 
+
+        public async Task GetAllNotesUrlsFromParlimentAsync(IHtmlDocument firstPage, List<string> urls)
+        {
+            List<IHtmlDocument> toScrap = new List<IHtmlDocument>();
+            toScrap.Add(firstPage);
+            string url = "https://www.tweedekamer.nl/kamerstukken/plenaire_verslagen?qry=*&fld_tk_categorie=kamerstukken&srt=date%3Adesc%3Adate&fld_prl_kamerstuk=Plenaire+verslagen&dpp=25&clusterName=Kamerstukken&page=";
+            int currentPage = 1;
+            int maxPage = MaxPage(firstPage);
+            while(currentPage <= maxPage)
+            {
+                Console.WriteLine(url + currentPage);
+                var document = await GetUrlDocument(url + currentPage);
+                GetUrlsFromParlimentPage(document, urls);
+                toScrap.Add(document);
+                currentPage++;
+            }
+        }
+
+        private int MaxPage(IHtmlDocument document)
+        {
+            foreach (var element in document.All)
+            {
+                if (element.ClassName != null && element.ClassName == "max-pages")
+                {
+                    string content = element.InnerHtml;
+                    content = content.Substring(3);
+                    return int.Parse(content);
+                }
+            }
+            return 0;
+        }
+        private void GetUrlsFromParlimentPage(IHtmlDocument document, List<string> urls)
+        {
+            foreach (var element in document.All)
+            {
+                if (element.ClassName != null && element.ClassName == "card__title")
+                {
+                    string url = "https://www.tweedekamer.nl/" + GetUrlFromHtml(element, 30);
+                    Console.WriteLine("Got url: " + url);
+                    urls.Add(url);                   
+                }
+            }
+        }
+
+        private string GetUrlFromHtml(IElement html, int hrefIndex)
+        {
+            var outerHtml = html.OuterHtml;
+            outerHtml = outerHtml.Substring(hrefIndex);
+            int endIndex = outerHtml.IndexOf('"') - 1;
+            return outerHtml.Substring(0, endIndex);
+        }
+
+        public void ScrapePageForText(IHtmlDocument document, string[] QueryTerms)
         {
             IEnumerable<IElement> articleLink = null;
             Dictionary<string, int> partySpoke = new Dictionary<string, int>();
