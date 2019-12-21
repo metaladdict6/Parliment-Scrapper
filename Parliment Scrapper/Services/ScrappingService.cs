@@ -28,8 +28,6 @@ namespace Parliment_Scrapper.Services
             return document;
         }
 
- 
-
         public async Task GetAllNotesUrlsFromParlimentAsync(IHtmlDocument firstPage, List<string> urls)
         {
             List<IHtmlDocument> toScrap = new List<IHtmlDocument>();
@@ -77,11 +75,25 @@ namespace Parliment_Scrapper.Services
         {
             var outerHtml = html.OuterHtml;
             outerHtml = outerHtml.Substring(hrefIndex);
-            int endIndex = outerHtml.IndexOf('"') - 1;
+            int endIndex = outerHtml.IndexOf('"') ;
             return outerHtml.Substring(0, endIndex);
         }
 
-        public void ScrapePageForText(IHtmlDocument document, string[] QueryTerms)
+        public async void ScrapeAllPagesForText(List<string> urls)
+        {
+            foreach(string url in urls)
+            {
+                var document = await GetDocument(url);
+                ScrapePageForText(document);
+            }
+        }
+
+        private async Task<IHtmlDocument> GetDocument(string url)
+        {
+            return await GetUrlDocument(url);
+        }
+
+        public void ScrapePageForText(IHtmlDocument document)
         {
             IEnumerable<IElement> articleLink = null;
             Dictionary<string, int> partySpoke = new Dictionary<string, int>();
@@ -116,11 +128,8 @@ namespace Parliment_Scrapper.Services
                         text = RemoveWordFromString("</strong>", text);
                         text = RemoveWordFromString("<br>", text);
 
-                        Console.WriteLine("Speaker title: " + speakerTitle);
-                        Console.WriteLine("Speaker: " + speaker);
-                        Console.WriteLine("Partij: " + party);
+                    
                         startIndexOfSubstance = text.IndexOf("<br>");
-                        Console.WriteLine("Tekst: " + text.Substring(startIndexOfSubstance + 4));
                     }
                 }
 

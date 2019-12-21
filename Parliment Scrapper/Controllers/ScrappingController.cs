@@ -24,7 +24,7 @@ namespace Parliment_Scrapper.Controllers
         public async Task ScrapUrlAsync(string url)
         {
             var document = await ScrappingService.GetUrlDocument(TestUrl);
-            ScrappingService.ScrapePageForText(document, new string[5]);
+            ScrappingService.ScrapePageForText(document);
         }
 
         [HttpGet("All")]
@@ -35,6 +35,7 @@ namespace Parliment_Scrapper.Controllers
             var document = await ScrappingService.GetUrlDocument(parlimentUrl);
             await ScrappingService.GetAllNotesUrlsFromParlimentAsync(document, urls);
             Console.WriteLine("Amount of Notes: " + urls.Count);
+            ScrappingService.ScrapeAllPagesForText(urls);
         }
     }
 }
